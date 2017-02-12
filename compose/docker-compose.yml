@@ -1,0 +1,9 @@
+wealth:
+        container_name: "wealth"
+        restart: "UNLESS-STOP"
+        image: zzjr/tomcat:latest
+        volumes:
+                - ./tomcat/webapps/:/usr/local/tomcat/webapps/
+        ports:
+                - "8080:8080"
+        command: /usr/local/tomcat/bin/catalina.sh run

@@ -1,9 +1,20 @@
-wealth:
-        container_name: "wealth"
+rap:
+        container_name: "rap"
         restart: "UNLESS-STOP"
         image: zzjr/tomcat:latest
         volumes:
-                - ./tomcat/webapps/:/usr/local/tomcat/webapps/
+                - ./tomcat/rap/:/usr/local/tomcat/webapps/
+                - ./logs/rap/:/usr/local/tomcat/logs/
         ports:
                 - "8080:8080"
         command: /usr/local/tomcat/bin/catalina.sh run
+
+mysql:
+        container_name: "mysql"
+        restart: "UNLESS-STOP"
+        image: zzjr/mysql:latest
+        volumes:
+                - ./mysql/data/:/var/lib/mysql/
+        ports:
+                - "3306:3306"
+        command: /usr/bin/mysqld_safe

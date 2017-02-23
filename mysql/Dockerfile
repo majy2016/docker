@@ -7,7 +7,7 @@ FROM daocloud.io/centos:6
 MAINTAINER majy<majiayang@zuozh.com>
 
 RUN \
-	yum -y update && \
+#	yum -y update && \
 	yum -y install mysql-server
 
 RUN /etc/init.d/mysqld start &&\

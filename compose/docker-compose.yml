@@ -1,14 +1,14 @@
-rap:
-        container_name: "rap"
+wealth:
+        container_name: "wealth"
         restart: "UNLESS-STOP"
         image: zzjr/tomcat:latest
         volumes:
-                - ./tomcat/rap/:/usr/local/tomcat/webapps/
-                - ./logs/rap/:/usr/local/tomcat/logs/
-        ports:
-                - "8080:8080"
+                - ./tomcat/wealth/:/usr/local/tomcat/webapps/
+                - ./logs/wealth/:/usr/local/tomcat/logs/
+        links:
+                - mysql:db.niubangold.com
+                - redis:redis.niubangold.com
         command: /usr/local/tomcat/bin/catalina.sh run
-
 mysql:
         container_name: "mysql"
         restart: "UNLESS-STOP"
@@ -18,3 +18,8 @@ mysql:
         ports:
                 - "3306:3306"
         command: /usr/bin/mysqld_safe
+redis:
+        container_name: "redis"
+        restart: "UNLESS-STOP"
+        image: zzjr/redis:latest
+        command: redis-server

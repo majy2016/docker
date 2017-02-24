@@ -8,7 +8,6 @@ rap:
         ports:
                 - "8080:8080"
         command: /usr/local/tomcat/bin/catalina.sh run
-
 mysql:
         container_name: "mysql"
         restart: "UNLESS-STOP"
@@ -18,3 +17,20 @@ mysql:
         ports:
                 - "3306:3306"
         command: /usr/bin/mysqld_safe
+redis:
+        container_name: "redis"
+        restart: "UNLESS-STOP"
+        image: zzjr/redis:latest
+        command: redis-server
+zookeeper:
+        container_name: "zookeeper"
+        restart: "UNLESS-STOP"
+        image: zzjr/zookeeper:latest
+        command: sh ~/pkg/start.sh
+nginx:
+        container_name: "nginx"
+        restart: "UNLESS-STOP"
+        image: zzjr/nginx:latest
+        volumes:
+                - ./logs/nginx/:/usr/local/nginx/logs/
+        command: sh ~/pkg/start.sh

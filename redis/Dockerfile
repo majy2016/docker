@@ -1,0 +1,25 @@
+#Vsersion 0.1
+
+#base image
+FROM daocloud.io/centos:6
+
+#au
+MAINTAINER majy<majiayang@zuozh.com>
+
+COPY redis-3.2.8.tar.gz /root/pkg/
+
+RUN \
+	yum -y install make gcc libc6-dev
+#	yum -y update && \
+
+RUN \
+	mkdir /usr/local/redis &&\
+	tar -zxvf ~/pkg/redis-3.2.8.tar.gz -C /usr/local/redis --strip-components 1 &&\
+	make MALLOC=libc -C /usr/local/redis/ &&\
+	make MALLOC=libc -C /usr/local/redis/ install
+
+#port
+EXPOSE 6379
+
+#start cmd
+#CMD [ "redis-server" ]

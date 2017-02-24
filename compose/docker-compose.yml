@@ -8,6 +8,7 @@ wealth:
         links:
                 - mysql:db.niubangold.com
                 - redis:redis.niubangold.com
+                - zookeeper:zk.niubangold.com
         command: /usr/local/tomcat/bin/catalina.sh run
 mysql:
         container_name: "mysql"
@@ -23,3 +24,8 @@ redis:
         restart: "UNLESS-STOP"
         image: zzjr/redis:latest
         command: redis-server
+zookeeper:
+        container_name: "zookeeper"
+        restart: "UNLESS-STOP"
+        image: zzjr/zookeeper:latest
+        command: sh ~/pkg/start.sh

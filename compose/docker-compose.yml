@@ -7,6 +7,9 @@ rap:
                 - ./logs/rap/:/usr/local/tomcat/logs/
         ports:
                 - "8080:8080"
+        links:
+                - redis:reds.majiayang.com
+                - mysql:mysql.majiayang.com
         command: /usr/local/tomcat/bin/catalina.sh run
 mysql:
         container_name: "mysql"
@@ -26,11 +29,11 @@ zookeeper:
         container_name: "zookeeper"
         restart: "UNLESS-STOP"
         image: zzjr/zookeeper:latest
-        command: sh ~/pkg/start.sh
+        command: sh /root/pkg/start.sh
 nginx:
         container_name: "nginx"
         restart: "UNLESS-STOP"
         image: zzjr/nginx:latest
         volumes:
                 - ./logs/nginx/:/usr/local/nginx/logs/
-        command: sh ~/pkg/start.sh
+        command: sh /root/pkg/start.sh

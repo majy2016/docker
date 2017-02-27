@@ -13,7 +13,8 @@ RUN \
 RUN /etc/init.d/mysqld start &&\
     mysql -e "grant all privileges on *.* to 'root'@'%' identified by 'letmein';"&&\
     mysql -e "grant all privileges on *.* to 'root'@'localhost' identified by 'letmein';"&&\
-    mysql -u root -pletmein -e "show databases;"
+    mysql -u root -pletmein -e "show databases;" &&\
+    mysqladmin -u root password "majiayang"
 
 #port
 EXPOSE 3306

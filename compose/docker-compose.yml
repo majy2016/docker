@@ -1,3 +1,4 @@
+# au majy<majiayang@zuozh.com>
 wealth:
         container_name: "wealth"
         restart: "UNLESS-STOP"
@@ -7,9 +8,9 @@ wealth:
                 - ./tomcat/wealth_conf/:/usr/local/tomcat/conf/properties/
                 - ./logs/wealth/:/usr/local/tomcat/logs/
         links:
-                - mysql:db.niubangold.com
-                - redis:redis.niubangold.com
-                - zookeeper:zk.niubangold.com
+                - mysql:db.majiayang.com
+                - redis:redis.majiayang.com
+                - zookeeper:zk.majiayang.com
         command: /usr/local/tomcat/bin/catalina.sh run
 pms:
         container_name: "pms"
@@ -20,9 +21,20 @@ pms:
                 - ./logs/pms/:/usr/local/tomcat/logs/
                 - ./tomcat/properties/pms/:/usr/local/tomcat/conf/properties/
         links:
-                - mysql:db.niubangold.com
-                - redis:redis.niubangold.com
-                - zookeeper:zk.niubangold.com
+                - mysql:db.majiayang.com
+                - redis:redis.majiayang.com
+                - zookeeper:zk.majiayang.com
+        command: /usr/local/tomcat/bin/catalina.sh run
+rap:
+        container_name: "rap"
+        restart: "UNLESS-STOP"
+        image: zzjr/tomcat:latest
+        volumes:
+                - ./tomcat/rap/:/usr/local/tomcat/webapps/
+                - ./logs/rap/:/usr/local/tomcat/logs/
+        links:
+                - mysql:db.majiayang.com
+                - redis:redis.majiayang.com
         command: /usr/local/tomcat/bin/catalina.sh run
 mldp:
         container_name: "mldp"
@@ -33,9 +45,9 @@ mldp:
                 - ./logs/mldp/:/usr/local/tomcat/logs/
                 - ./tomcat/properties/mldp/:/usr/local/tomcat/conf/properties/
         links:
-                - mysql:db.niubangold.com
-                - redis:redis.niubangold.com
-                - zookeeper:zk.niubangold.com
+                - mysql:db.majiayang.com
+                - redis:redis.majiayang.com
+                - zookeeper:zk.majiayang.com
         ports:
                 - "8080:8080"
         links:
@@ -72,7 +84,8 @@ nginx:
         ports:
                 - "80:80"
         links:
-                - wealth:wealth
-                - pms:pms
-                - mldp:mldp
+#                - wealth:wealth
+#                - pms:pms
+#                - mldp:mldp
+                - rap:rap.majiayang.com
         command: sh /root/pkg/start.sh

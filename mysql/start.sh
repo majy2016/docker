@@ -1,4 +1,5 @@
 #!/bin/bash
+# au majy<majiayang@zuozh.com>
 /etc/init.d/mysqld start
 
 while true

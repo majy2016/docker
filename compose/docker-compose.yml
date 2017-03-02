@@ -36,6 +36,11 @@ mldp:
                 - mysql:db.niubangold.com
                 - redis:redis.niubangold.com
                 - zookeeper:zk.niubangold.com
+        ports:
+                - "8080:8080"
+        links:
+                - redis:reds.majiayang.com
+                - mysql:mysql.majiayang.com
         command: /usr/local/tomcat/bin/catalina.sh run
 mysql:
         container_name: "mysql"

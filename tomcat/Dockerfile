@@ -10,7 +10,7 @@ COPY jdk-7u79-linux-x64.tar.gz /root/pkg/
 COPY apache-tomcat-7.0.75.tar.gz /root/pkg/
 
 RUN \
-	yum -y update && \
+#	yum -y update && \
 	yum -y install net-tools openssh-server
 
 RUN mkdir /opt/java

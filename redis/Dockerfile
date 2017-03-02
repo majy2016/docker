@@ -18,6 +18,10 @@ RUN \
 	make MALLOC=libc -C /usr/local/redis/ &&\
 	make MALLOC=libc -C /usr/local/redis/ install
 
+RUN \
+    sed -i "61s/bind 127.0.0.1/#bind 127.0.0.1/g" /usr/local/redis/redis.conf && \
+    sed -i "80s/protected-mode yes/protected-mode no/g" /usr/local/redis/redis.conf
+
 #port
 EXPOSE 6379
 

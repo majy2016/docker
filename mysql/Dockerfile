@@ -6,6 +6,8 @@ FROM daocloud.io/centos:6
 #au
 MAINTAINER majy<majiayang@zuozh.com>
 
+COPY start.sh /root/pkg/
+
 RUN \
 	yum -y install wget && \
 	#yum -y update && \
@@ -24,5 +26,5 @@ RUN /etc/init.d/mysqld start &&\
 EXPOSE 3306
 
 #start cmd
-#CMD ["/usr/bin/mysqld_safe"]
+#CMD ["/etc/init.d/mysqld start"]
 

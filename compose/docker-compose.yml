@@ -50,7 +50,7 @@ mysql:
                 - ./mysql/data/:/var/lib/mysql/
         ports:
                 - "3306:3306"
-        command: /usr/bin/mysqld_safe
+        command: sh /root/pkg/start.sh
 redis:
         container_name: "redis"
         restart: "UNLESS-STOP"

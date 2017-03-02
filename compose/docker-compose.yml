@@ -4,7 +4,34 @@ wealth:
         image: zzjr/tomcat:latest
         volumes:
                 - ./tomcat/wealth/:/usr/local/tomcat/webapps/
+                - ./tomcat/wealth_conf/:/usr/local/tomcat/conf/properties/
                 - ./logs/wealth/:/usr/local/tomcat/logs/
+        links:
+                - mysql:db.niubangold.com
+                - redis:redis.niubangold.com
+                - zookeeper:zk.niubangold.com
+        command: /usr/local/tomcat/bin/catalina.sh run
+pms:
+        container_name: "pms"
+        restart: "UNLESS-STOP"
+        image: zzjr/tomcat:latest
+        volumes:
+                - ./tomcat/pms/:/usr/local/tomcat/webapps/
+                - ./logs/pms/:/usr/local/tomcat/logs/
+                - ./tomcat/properties/pms/:/usr/local/tomcat/conf/properties/
+        links:
+                - mysql:db.niubangold.com
+                - redis:redis.niubangold.com
+                - zookeeper:zk.niubangold.com
+        command: /usr/local/tomcat/bin/catalina.sh run
+mldp:
+        container_name: "mldp"
+        restart: "UNLESS-STOP"
+        image: zzjr/tomcat:latest
+        volumes:
+                - ./tomcat/mldp/:/usr/local/tomcat/webapps/
+                - ./logs/mldp/:/usr/local/tomcat/logs/
+                - ./tomcat/properties/mldp/:/usr/local/tomcat/conf/properties/
         links:
                 - mysql:db.niubangold.com
                 - redis:redis.niubangold.com
@@ -28,4 +55,19 @@ zookeeper:
         container_name: "zookeeper"
         restart: "UNLESS-STOP"
         image: zzjr/zookeeper:latest
-        command: sh ~/pkg/start.sh
+        command: sh /root/pkg/start.sh
+nginx:
+        container_name: "nginx"
+        restart: "UNLESS-STOP"
+        image: zzjr/nginx:latest
+        volumes:
+                - ./logs/nginx/:/usr/local/nginx/logs/
+        expose: 
+                - "80"
+        ports:
+                - "80:80"
+        links:
+                - wealth:wealth
+                - pms:pms
+                - mldp:mldp
+        command: sh /root/pkg/start.sh

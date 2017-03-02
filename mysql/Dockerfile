@@ -7,13 +7,14 @@ FROM daocloud.io/centos:6
 MAINTAINER majy<majiayang@zuozh.com>
 
 RUN \
-	yum -y install mysql-server
-	#yum -y update && \
+	yum -y install wget && \
+	wget http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm && \
+	rpm -i mysql-community-release-el6-5.noarch.rpm && \
+	sed -i '25 s/enabled=0/enabled=1/g' /etc/yum.repos.d/mysql-community-source.repo && \
+	yum -y install mysql-community-server
 
 RUN /etc/init.d/mysqld start &&\
-    mysql -e "grant all privileges on *.* to 'root'@'%' identified by 'letmein';"&&\
-    mysql -e "grant all privileges on *.* to 'root'@'localhost' identified by 'letmein';"&&\
-    mysql -u root -pletmein -e "show databases;"
+    mysqladmin -u root password "majiayang"
 
 #port
 EXPOSE 3306

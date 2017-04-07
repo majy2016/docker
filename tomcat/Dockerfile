@@ -29,8 +29,7 @@ ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib
 ENV PATH ${JAVA_HOME}/bin:$PATH
 
 #port
-EXPOSE 8080
-EXPOSE 22
+#EXPOSE 8080
 
 #start cmd
 #CMD ["/usr/local/tomcat/bin/catalina.sh",'run']

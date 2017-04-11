@@ -22,6 +22,9 @@ RUN \
     sed -i "61s/bind 127.0.0.1/#bind 127.0.0.1/g" /usr/local/redis/redis.conf && \
     sed -i "80s/protected-mode yes/protected-mode no/g" /usr/local/redis/redis.conf
 
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 #port
 EXPOSE 6379
 

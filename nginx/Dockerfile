@@ -22,6 +22,9 @@ RUN \
 	rm -rf /usr/local/nginx/conf/nginx.conf   && \
 	cp /root/pkg/nginx.conf  /usr/local/nginx/conf/
 
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 #port
 
 #start cmd

@@ -22,6 +22,9 @@ RUN /etc/init.d/mysqld start &&\
     mysql -e "grant all privileges on *.* to 'root'@'%' identified by 'majiayang';"&&\
     mysql -e "grant all privileges on *.* to 'root'@'localhost' identified by 'majiayang';"
 
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 #port
 EXPOSE 3306
 

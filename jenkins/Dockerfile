@@ -1,47 +1,71 @@
-#Vsersion 0.1
+FROM openjdk:8-jdk
 
-#base image
-FROM daocloud.io/centos:6
+RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
 
-#au
-MAINTAINER majy<majiayang@zuozh.com>
+ENV JENKINS_HOME /var/jenkins_home
+ENV JENKINS_SLAVE_AGENT_PORT 50000
 
-COPY jdk-7u79-linux-x64.tar.gz /root/pkg/
-COPY apache-tomcat-7.0.75.tar.gz /root/pkg/
-COPY apache-maven-3.3.9-bin.tar.gz /root/pkg/
+ARG user=jenkins
+ARG group=jenkins
+ARG uid=1000
+ARG gid=1000
 
-RUN \
-#	yum -y update && \
-	yum -y install net-tools openssh-server git
+# Jenkins is run with user `jenkins`, uid = 1000
+# If you bind mount a volume from the host or a data container, 
+# ensure you use the same uid
+RUN groupadd -g ${gid} ${group} \
+    && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
 
-RUN mkdir /opt/java
-RUN mkdir /usr/local/tomcat
-RUN mkdir /usr/local/maven
-RUN mkdir /root/.ssh
-RUN mkdir /root/.jenkins
+# Jenkins home directory is a volume, so configuration and build history 
+# can be persisted and survive image upgrades
+VOLUME /var/jenkins_home
 
-RUN \
-	tar -zxvf ~/pkg/apache-tomcat-7.0.75.tar.gz -C /usr/local/tomcat --strip-components 1  && \
-	tar -zxvf ~/pkg/jdk-7u79-linux-x64.tar.gz -C /opt/java --strip-components 1 && \
-	tar -zxvf ~/pkg/apache-maven-3.3.9-bin.tar.gz -C /usr/local/maven --strip-components 1 && \
-	rm -rf /usr/local/tomcat/webapps/* && \
-	sed -i "22a export JAVA_HOME=/opt/java" /usr/local/tomcat/bin/setclasspath.sh && \
-	sed -i "22a export JRE_HOME=/opt/java/jre" /usr/local/tomcat/bin/setclasspath.sh && \
-	git config --global user.name "majiayang" && \
-	git config --global user.email majiayang@zuozh.com
-#set path
-ENV JAVA_HOME /opt/java
-ENV MAVEN_HOME /usr/local/maven
-ENV JRE_HOME JRE_HOME=${JAVA_HOME}/jre
-ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib
-ENV PATH ${JAVA_HOME}/bin:$PATH
-ENV PATH ${MAVEN_HOME}/bin:$PATH
+# `/usr/share/jenkins/ref/` contains all reference configuration we want 
+# to set on a fresh new installation. Use it to bundle additional plugins 
+# or config file with your custom jenkins Docker image.
+RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d
 
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+ENV TINI_VERSION 0.14.0
+ENV TINI_SHA 6c41ec7d33e857d4779f14d9c74924cab0c7973485d2972419a3b7c7620ff5fd
 
-#port
-#EXPOSE 8080
+# Use tini as subreaper in Docker container to adopt zombie processes 
+RUN curl -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static-amd64 -o /bin/tini && chmod +x /bin/tini \
+  && echo "$TINI_SHA  /bin/tini" | sha256sum -c -
 
-#start cmd
-#CMD ["/usr/local/tomcat/bin/catalina.sh",'run']
+COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
+
+# jenkins version being bundled in this docker image
+ARG JENKINS_VERSION
+ENV JENKINS_VERSION ${JENKINS_VERSION:-2.46.1}
+
+# jenkins.war checksum, download will be validated using it
+ARG JENKINS_SHA=33a3f4d983c6188a332291e1d974afa0a2ee96a0ae3cb6dd4f2098086525f9f1
+
+# Can be used to customize where jenkins.war get downloaded from
+ARG JENKINS_URL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war
+
+# could use ADD but this one does not check Last-Modified header neither does it allow to control checksum 
+# see https://github.com/docker/docker/issues/8331
+RUN curl -fsSL ${JENKINS_URL} -o /usr/share/jenkins/jenkins.war \
+  && echo "${JENKINS_SHA}  /usr/share/jenkins/jenkins.war" | sha256sum -c -
+
+ENV JENKINS_UC https://updates.jenkins.io
+RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins/ref
+
+# for main web interface:
+EXPOSE 8080
+
+# will be used by attached slave agents:
+EXPOSE 50000
+
+ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
+
+USER ${user}
+
+COPY jenkins-support /usr/local/bin/jenkins-support
+COPY jenkins.sh /usr/local/bin/jenkins.sh
+ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
+
+# from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
+COPY plugins.sh /usr/local/bin/plugins.sh
+COPY install-plugins.sh /usr/local/bin/install-plugins.sh

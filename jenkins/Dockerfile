@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk
 
-RUN apt-get update && apt-get install -y git curl vim && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git curl vim python-dev libssl-dev&& rm -rf /var/lib/apt/lists/*
 
 ENV JENKINS_HOME /var/jenkins_home
 ENV JENKINS_SLAVE_AGENT_PORT 50000
@@ -77,6 +77,13 @@ RUN mkdir /opt/maven
 RUN git config --global user.name "majiayang"
 RUN git config --global user.email majiayang@zuozh.com
 COPY apache-maven-3.3.9-bin.tar.gz /root/pkg/
+COPY pip-9.0.1.tar.gz /root/pkg/
 RUN tar -zxvf ~/pkg/apache-maven-3.3.9-bin.tar.gz -C /opt/maven --strip-components 1
+RUN tar -zxvf ~/pkg/pip-9.0.1.tar.gz -C /root/pkg/
+RUN wget http://peak.telecommunity.com/dist/ez_setup.py
+RUN python ez_setup.py
+RUN python /root/pkg/pip-9.0.1/setup.py install
+RUN pip install paramiko
+RUN pip install configparser
 ENV MAVEN_HOME /opt/maven
 ENV PATH ${MAVEN_HOME}/bin:$PATH

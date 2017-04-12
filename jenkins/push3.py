@@ -18,22 +18,22 @@ class Pu(object):
 
     def get_host(self):
         if self.env_type == "jiesuan":
-            print "project is :%s , env is %s" % (self.project, self.env_type)
+            print("project is :%s , env is %s" % (self.project, self.env_type))
             settings = configparser.ConfigParser()
             settings.read(self.file)
             return settings.get(self.env_type,self.project)
         else:
-            print "env : %s is not support ------------------"%self.env_type
+            print("env : %s is not support ------------------"%self.env_type)
 
     def ssh_connect(self):
-        print "ssh connect host is : %s"%(host)
+        print("ssh connect host is : %s"%(host))
         try:
             sc = paramiko.SSHClient()
             sc.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             sc.connect(hostname=host,port=self.port,username=self.user,password=self.password)
             self.__connect = sc
         except Exception as e:
-            print "connect ssh env error ---------!",e
+            print("connect ssh env error ---------!",e)
 
     def sftp_connect(self):
         print("sftp connect host is : %s" % (host))
@@ -42,12 +42,12 @@ class Pu(object):
             transport.connect(username=self.user,password=self.password)
             self.__transport = transport
         except Exception as e:
-            print "connect sftp env error ---------!",e
+            print("connect sftp env error ---------!",e)
 
     def ssh_command(self,commands):
         for command in commands:
             stdin,stdout,stderr = self.__connect.exec_command(command)
-            print "shell command result :",stdout.readlines()
+            print("shell command result :",stdout.readlines())
 
     def ssh_upload(self):
         sftp = paramiko.SFTPClient.from_transport(self.__transport)
@@ -77,11 +77,11 @@ done
 fi""",
                   "rm -rf /usr/local/tomcat/webapps/*"]
     pu.ssh_command(commands_1)
-    print "upload -------------"
+    print("upload -------------")
     pu.sftp_connect()
     pu.ssh_upload()
     commands_2 =["./usr/local/tomcat/bin/startup.sh"]
-    print "start ---------------"
+    print("start ---------------")
     pu.ssh_command(commands_2)
     pu.ssh_close()
 

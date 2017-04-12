@@ -9,7 +9,7 @@ find /usr/share/jenkins/ref/ -type f -exec bash -c '. /usr/local/bin/jenkins-sup
 if [[ $# -lt 1 ]] || [[ "$1" == "--"* ]]; then
 
   # read JAVA_OPTS and JENKINS_OPTS into arrays to avoid need for eval (and associated vulnerabilities)
-  java_opts_array=()
+  java_opts_array=( )
   while IFS= read -r -d '' item; do
     java_opts_array+=( "$item" )
   done < <([[ $JAVA_OPTS ]] && xargs printf '%s\0' <<<"$JAVA_OPTS")

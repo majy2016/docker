@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk
 
-RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git curl vim && rm -rf /var/lib/apt/lists/*
 
 ENV JENKINS_HOME /var/jenkins_home
 ENV JENKINS_SLAVE_AGENT_PORT 50000
@@ -50,7 +50,7 @@ RUN curl -fsSL ${JENKINS_URL} -o /usr/share/jenkins/jenkins.war \
   && echo "${JENKINS_SHA}  /usr/share/jenkins/jenkins.war" | sha256sum -c -
 
 ENV JENKINS_UC https://updates.jenkins.io
-RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins/ref
+RUN chown -R root "$JENKINS_HOME" /usr/share/jenkins/ref
 
 # for main web interface:
 EXPOSE 8080
@@ -69,3 +69,14 @@ ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 # from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 COPY plugins.sh /usr/local/bin/plugins.sh
 COPY install-plugins.sh /usr/local/bin/install-plugins.sh
+
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN mkdir /root/.jenkins
+RUN mkdir /opt/maven
+RUN git config --global user.name "majiayang"
+RUN git config --global user.email majiayang@zuozh.com
+COPY apache-maven-3.3.9-bin.tar.gz /root/pkg/
+RUN tar -zxvf ~/pkg/apache-maven-3.3.9-bin.tar.gz -C /opt/maven --strip-components 1
+ENV MAVEN_HOME /opt/maven
+ENV PATH ${MAVEN_HOME}/bin:$PATH

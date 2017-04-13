@@ -7,14 +7,18 @@ class Pu(object):
     def __init__(self):
         self.port = 22
         self.user = "root"
-        self.password = "majiayang"
+        self.password = "zzjr#2015"
         self.file = "host.conf"
         self.params = sys.argv
         self.project = self.params[1]
         self.env_type = self.params[2]
-        # self.local = "/var/jenkins_home/jobs/%s/%s.war"%(self.project,self.project)
-        self.local = "/Users/majy/Documents/code/docker/jenkins/jenkins.sh"
+        self.local = "/var/jenkins_home/workspace/%s/default/%s-webapp/target/%s.war"%(self.project,self.project,self.project)
+        # self.local = "/Users/majy/Documents/code/docker/jenkins/jenkins.sh"
         self.remote = "/usr/local/tomcat/webapps/ROOT.war"
+
+    def get_project(self):
+        params = sys.argv
+        return self.params[1]
 
     def get_host(self):
         if self.env_type == "jiesuan":
@@ -36,7 +40,7 @@ class Pu(object):
             print "connect ssh env error ---------!",e
 
     def sftp_connect(self):
-        print("sftp connect host is : %s" % (host))
+        print "sftp connect host is : %s" % (host)
         try:
             transport = paramiko.Transport(host,self.port)
             transport.connect(username=self.user,password=self.password)
@@ -80,7 +84,11 @@ fi""",
     print "upload -------------"
     pu.sftp_connect()
     pu.ssh_upload()
-    commands_2 =["./usr/local/tomcat/bin/startup.sh"]
+    print pu.get_project()
+    if pu.get_project() == "tengu" or pu.get_project() == "dragon":
+        commands_2 = ["service tomcat start"]
+    else:
+        commands_2 =["cd /usr/local/tomcat/bin/&&./startup.sh"]
     print "start ---------------"
     pu.ssh_command(commands_2)
     pu.ssh_close()

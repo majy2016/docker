@@ -28,3 +28,12 @@ for(i=0;i<build_names.size();i++){
         //build job: 'cms', parameters: [string(name: 'git_url', value: 'git@gitlab.lark.wiki:nbgold/cms.git'), string(name: 'git_name', value: 'cms'), string(name: 'release_branch', value: 'master')]
 }
 }
+
+
+#sonar
+sonar.projectKey=$git_name
+sonar.projectName=$git_name
+sonar.projectVersion=$release_branch
+sonar.sourceEncoding=UTF-8
+sonar.language=java
+sonar.sources=.

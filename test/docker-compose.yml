@@ -1,0 +1,7 @@
+test:
+        container_name: "test"
+        restart: "UNLESS-STOP"
+        image: zzjr/test:latest
+        ports:
+        - "8081:8081"
+        command: java -jar /root/pkg/test.jar

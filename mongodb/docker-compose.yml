@@ -1,0 +1,11 @@
+mongodb:
+        container_name: "mongodb"
+        restart: "UNLESS-STOP"
+        image: zzjr/mongodb:latest
+        ports:
+        - "27017:27017"
+        - "28017:28017"
+        volumes:
+        - ./mongodb:/data/db
+        - ./ssh/:/root/.ssh
+        command: mongod

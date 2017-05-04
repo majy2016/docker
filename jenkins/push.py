@@ -17,14 +17,16 @@ class Pu(object):
         self.remote = "/usr/local/tomcat/webapps/ROOT.war"
 
     def get_project(self):
-        params = sys.argv
         return self.params[1]
 
+    def get_evn(self):
+        return self.params[2]
+
     def get_host(self):
-        if self.env_type == "jiesuan":
-            print "project is :%s , env is %s" % (self.project, self.env_type)
-            settings = configparser.ConfigParser()
-            settings.read(self.file)
+        print "project is :%s , env is %s" % (self.project, self.env_type)
+        settings = configparser.ConfigParser()
+        settings.read(self.file)
+        if self.env_type == "jiesuan" or self.env_type =="yunwei":
             return settings.get(self.env_type,self.project)
         else:
             print "env : %s is not support ------------------"%self.env_type
@@ -85,7 +87,7 @@ fi""",
     pu.sftp_connect()
     pu.ssh_upload()
     print pu.get_project()
-    if pu.get_project() == "tengu" or pu.get_project() == "dragon":
+    if pu.get_project() == "tengu" or pu.get_project() == "dragon" or pu.get_evn() =="yunwei":
         commands_2 = ["service tomcat start"]
     else:
         commands_2 =["cd /usr/local/tomcat/bin/&&./startup.sh"]

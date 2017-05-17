@@ -7,7 +7,6 @@ FROM openjdk:8-jdk
 MAINTAINER majy<majiayang@zuozh.com>
 
 
-COPY test.jar /root/pkg/
 COPY apache-maven-3.3.9-bin.tar.gz /root/pkg/
 COPY settings.xml /root/pkg/
 

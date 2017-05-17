@@ -2,6 +2,8 @@ test:
         container_name: "test"
         restart: "UNLESS-STOP"
         image: zzjr/test:latest
+        volumes:
+          - ./test:/root/test
         ports:
         - "8081:8081"
-        command: java -jar /root/pkg/test.jar
+        command: java -jar /root/test/test.jar

@@ -20,8 +20,8 @@ RUN \
 
 RUN \
     sed -i "61s/bind 127.0.0.1/#bind 127.0.0.1/g" /usr/local/redis/redis.conf && \
-    sed -i "80s/protected-mode yes/protected-mode no/g" /usr/local/redis/redis.conf
-
+    sed -i "80s/protected-mode yes/protected-mode no/g" /usr/local/redis/redis.conf  && \
+    sed -i "721s/cluster-enabled yes/#cluster-enabled yes/g" /usr/local/redis/redis.conf
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -29,4 +29,5 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 EXPOSE 6379
 
 #start cmd
-#CMD [ "redis-server" ]
+#CMD [ "redis-server --protected-mode no" ]
+#CMD [ "redis-server /usr/local/redis/redis.conf" ]

@@ -87,3 +87,9 @@ RUN pip install paramiko
 RUN pip install configparser
 ENV MAVEN_HOME /opt/maven
 ENV PATH ${MAVEN_HOME}/bin:$PATH
+RUN apt-get install -y npm
+RUN apt-get install -y nodejs-legacy
+RUN npm install npm@latest -g
+RUN n latest
+RUN export PATH=$PATH:/var/jenkins_home/phantomjs-2.1.1-linux-x86_64/bin/
+RUN export PATH=$PATH:/usr/local/n/versions/node/8.1.4/bin/

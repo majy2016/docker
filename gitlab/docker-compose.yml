@@ -1,0 +1,12 @@
+gitlab:
+        container_name: "gitlab"
+        restart: "UNLESS-STOP"
+        image: gitlab/gitlab-ee:latest
+        ports:
+        - "443:443"
+        - "10080:80"
+        volumes:
+        - ./config:/etc/gitlab
+        - ./logs:/var/log/gitlab
+        - ./data:/var/opt/gitlab
+        command: mysqld

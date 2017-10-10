@@ -4,9 +4,22 @@ gitlab:
         image: gitlab/gitlab-ee:latest
         ports:
         - "443:443"
-        - "10080:80"
+        - "10022:22"
         volumes:
         - ./config:/etc/gitlab
         - ./logs:/var/log/gitlab
         - ./data:/var/opt/gitlab
-        command: mysqld
+        hostname: "gitlab.ma.com"
+
+nginx:
+        container_name: "nginx"
+        restart: "UNLESS-STOP"
+        image: docker.io/nginx:latest
+        volumes:
+                - ../nginx/logs/:/var/log/nginx/
+                - ../nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        ports:
+                - "80:80"
+        links:
+                - gitlab:gitlab.ma.com
+  #      command: [nginx-debug, '-g', 'daemon off;']

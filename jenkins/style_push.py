@@ -73,6 +73,7 @@ if __name__ == '__main__':
         commands_1 = ["rm -rf /usr/local/admin/*"]
         commands_2 = ["cd /usr/local/admin&&tar -zxvf x.tar.gz --strip-components 1"]
         remote = "/usr/local/admin/x.tar.gz"
+    elif pj =="m2"
     pu.ssh_connect()
     pu.ssh_command(commands_1)
     print "upload -------------"

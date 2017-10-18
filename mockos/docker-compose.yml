@@ -1,0 +1,7 @@
+mockos:
+        container_name: "mockos"
+        restart: "UNLESS-STOP"
+        image: zzjr/mockos:latest
+        ports:
+        - "8888:8888"
+        command: java -jar /root/pkg/mock-oos.jar --server.port=8888

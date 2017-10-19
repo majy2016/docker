@@ -9,5 +9,5 @@ transmit:
         ports:
                 - "80:12500"
         hostname: "transmit.com"
-        WORKDIR: /usr/local/pypj
+        working_dir: /usr/local/pypj
         command: sh start.sh

@@ -1,0 +1,13 @@
+transmit:
+        container_name: "transmit"
+        restart: "UNLESS-STOP"
+        image: zzjr/flask:latest
+        volumes:
+                - ./nginx/logs/:/var/log/nginx/
+                - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+                - ./app/:/usr/local/pypj
+        ports:
+                - "80:12500"
+        hostname: "transmit.com"
+        WORKDIR: /usr/local/pypj
+        command: sh start.sh

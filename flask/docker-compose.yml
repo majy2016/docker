@@ -7,7 +7,7 @@ transmit:
                 - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
                 - ./app/:/usr/local/pypj
         ports:
-                - "80:12500"
+                - "12500:80"
         hostname: "transmit.com"
         working_dir: /usr/local/pypj
         command: sh start.sh

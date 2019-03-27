@@ -1,0 +1,6 @@
+# au majy<majiayang@zuozh.com>
+redis:
+        container_name: "redis"
+        restart: "UNLESS-STOP"
+        image: redis:latest
+        command: run

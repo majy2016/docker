@@ -1,0 +1,9 @@
+test:
+        container_name: "zzjr-test"
+        restart: "UNLESS-STOP"
+        image: zzjr/zzjr-test:latest
+        volumes:
+          - ./data:/root/test
+        ports:
+        - "9000:8080"
+        command: java -jar /root/test/hell.jar

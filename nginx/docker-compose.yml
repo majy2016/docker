@@ -1,0 +1,10 @@
+# au majy<majiayang@zuozh.com>
+nginx:
+        container_name: "nginx"
+        restart: "always"
+        image: docker.io/nginx:latest
+        ports:
+                - "80:80"
+        volumes:
+            - ./html:/var/www
+            - ./conf.d:/etc/nginx/conf.d

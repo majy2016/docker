@@ -1,0 +1,29 @@
+# au majy<majiayang@zuozh.com>:
+nginx:
+        container_name: "nginx"
+        restart: "UNLESS-STOP"
+        image: docker.io/nginx:latest
+        ports:
+                - "80:80"
+        volumes:
+            - ./html:/var/www/
+            - ./conf.d:/etc/nginx/conf.d/
+        links:
+            - hell:hell.sxc.com
+redis:
+        container_name: "redis"
+        restart: "UNLESS-STOP"
+        image: docker.io/redis:latest
+        ports:
+                - "6379:6379"
+        command: redis-server
+hell:
+        container_name: "hell"
+        restart: "UNLESS-STOP"
+        image: scx/jdk:latest
+        volumes:
+            - ./hell/:/var/jar/
+            - ./hell/:/var/project/miyatest/
+        links:
+            - redis:redis.sxc.com
+        command: java -jar /var/jar/hell.jar

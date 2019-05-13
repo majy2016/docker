@@ -1,7 +1,11 @@
 # au majy<majiayang@zuozh.com>
+#restart: "no"
+#restart: always
+#restart: on-failure
+#restart: unless-stopped
 wealth:
         container_name: "wealth"
-        restart: "UNLESS-STOP"
+        restart: "unless-stopped"
         image: zzjr/tomcat:latest
         volumes:
                 - ./tomcat/wealth/:/usr/local/tomcat/webapps/

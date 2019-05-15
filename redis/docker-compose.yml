@@ -1,8 +1,10 @@
 # au majy<majiayang@zuozh.com>
 redis:
         container_name: "redis"
-        restart: "no"
+        restart: "unless-stopped"
         image: docker.io/redis:latest
+        volumes:
+            - ./redis:/var/redis/
         ports:
                 - "6379:6379"
-        command: redis-server
+        command: redis-server /var/redis/redis.conf

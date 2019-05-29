@@ -25,6 +25,8 @@ hell:
         volumes:
             - ./hell/:/var/jar/
             - ./tester/:/var/project/tester/
+            - ./maven/:/root/.m2/repository/
+            - ./maven/settings.xml:/opt/maven/conf/settings.xml
         links:
             - redis:redis.sxc.com
         command: java -jar /var/jar/hell.jar

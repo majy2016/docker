@@ -7,6 +7,7 @@ nginx:
                 - "80:80"
         volumes:
             - ./html:/var/www/
+            - ./tester/:/var/project/tester/
             - ./conf.d:/etc/nginx/conf.d/
 redis:
         container_name: "redis"

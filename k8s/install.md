@@ -18,3 +18,8 @@ minikube dashboard
 
 
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+
+参考：
+https://www.jianshu.com/p/1329954aa329/
+https://developer.aliyun.com/article/221687

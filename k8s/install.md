@@ -12,7 +12,7 @@ iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
 
 choco install minikube
 
-minikube start
+minikube start --driver=docker --registry-mirror=https://293qnte5.mirror.aliyuncs.com
 
 minikube dashboard
 

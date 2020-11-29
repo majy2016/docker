@@ -1,25 +1,5 @@
-windows powershell
-1. 执行
-$env:chocolateyUseWindowsCompression = 'true'
+docker desktop
 
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+Kubernetes dashboard
 
-2. 执行
-
-iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
-
-
-
-choco install minikube
-
-minikube start --base-image="anjone/kicbase" --driver=docker --registry-mirror=https://293qnte5.mirror.aliyuncs.com
-
-minikube dashboard
-
-
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
-
-参考：
-https://www.jianshu.com/p/1329954aa329/
-https://developer.aliyun.com/article/221687
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
